@@ -46,3 +46,42 @@ def getAutoSaveInterval(n):
         fibo.append(fibo[i - 1] + fibo[i - 2])
 
     return fibo[n]
+"""
+Custom Fibonacci Sequence – Space Optimized Version
+---------------------------------------------------
+
+Problem:
+    Compute the n-th Fibonacci-like value with:
+        F(0) = 1
+        F(1) = 2
+        F(n) = F(n - 1) + F(n - 2)
+
+Approach:
+    - Use two variables to store the last two Fibonacci values.
+    - This reduces space complexity from O(n) to O(1).
+    - Iterate up to 'n' and update the pair.
+
+Time Complexity:  O(n)
+Space Complexity: O(1)
+
+Why this is good:
+    - Most optimal iterative approach.
+    - Perfect for coding rounds (IBM/HackerRank safe).
+"""
+
+def getAutoSaveInterval_space_optimized(n):
+    if n < 0:
+        return 0
+    if n == 0:
+        return 1
+    if n == 1:
+        return 2
+
+    prev2 = 1   # F(0)
+    prev1 = 2   # F(1)
+
+    for _ in range(2, n + 1):
+        curr = prev1 + prev2
+        prev2, prev1 = prev1, curr  # shift window forward
+
+    return curr
