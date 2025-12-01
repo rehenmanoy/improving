@@ -85,3 +85,77 @@ def getAutoSaveInterval_space_optimized(n):
         prev2, prev1 = prev1, curr  # shift window forward
 
     return curr
+"""
+Ways to Fill Slots with Single or Double Coverage
+-------------------------------------------------
+
+Problem:
+    You are given n slots (0 to n-1). In one operation, you can:
+        - Cover exactly 1 slot, or
+        - Cover exactly 2 adjacent slots.
+
+    Return the number of distinct ways to completely fill all n slots.
+
+    This is equivalent to counting the number of sequences of 1s and 2s
+    that sum up to n, where:
+        - 1 represents an operation covering a single slot
+        - 2 represents an operation covering two consecutive slots
+
+Recurrence:
+    Let dp[i] be the number of ways to fill i slots.
+
+    Base cases:
+        dp[0] = 1   (one way to fill zero slots: do nothing)
+        dp[1] = 1   (only one way: [1])
+
+    For i >= 2:
+        dp[i] = dp[i - 1] + dp[i - 2]
+
+    Reason:
+        - If the last operation covers 1 slot -> we must have filled (i - 1) slots before it -> dp[i - 1] ways.
+        - If the last operation covers 2 slots -> we must have filled (i - 2) slots before it -> dp[i - 2] ways.
+        - Total ways = sum of both possibilities.
+
+    This is the classic Fibonacci-style recurrence.
+
+Examples:
+    n = 3
+    dp: [1, 1, 2, 3]
+    Sequences of operations:
+        [1, 1, 1]
+        [1, 2]
+        [2, 1]
+    Answer: 3
+
+    n = 5
+    dp: [1, 1, 2, 3, 5, 8]
+    Answer: 8
+
+Constraints:
+    0 <= n <= 1000
+    Python can handle large values automatically (big integers).
+
+Time Complexity:
+    O(n) — we compute each dp[i] once in a simple loop.
+
+Space Complexity:
+    O(1) — we only keep track of the last two values instead of a full dp array.
+"""
+
+def countInstallationSequences(n):
+    if n < 0:
+        return 0
+
+    # Base cases:
+    if n == 0 or n == 1:
+        return 1
+
+    # prev2 -> dp[i-2], prev1 -> dp[i-1]
+    prev2 = 1  # dp[0]
+    prev1 = 1  # dp[1]
+
+    for _ in range(2, n + 1):
+        curr = prev1 + prev2  # dp[i] = dp[i-1] + dp[i-2]
+        prev2, prev1 = prev1, curr
+
+    return curr
